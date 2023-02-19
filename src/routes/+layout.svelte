@@ -52,6 +52,7 @@
     >
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
         <li><a href="/about">About</a></li>
+        <li><a href="/shoes">Shoes</a></li>
         <li><a href="/product/123">Product 123</a></li>
       </ul>
     </button>

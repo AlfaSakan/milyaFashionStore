@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "prisma:dev:deploy": "prisma migrate deploy",
+    "db:dev:rm": "docker compose rm dev-db -s -f -v",
+    "db:dev:up": "docker compose up dev-db -d",
+    "db:dev:restart": "yarn db:dev:rm && yarn db:dev:up && sleep 1 && yarn prisma:dev:deploy",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
@@ -25,6 +29,7 @@
     "eslint": "^8.28.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "postcss": "^8.4.21",
+    "prisma": "^4.10.1",
     "svelte": "^3.54.0",
     "svelte-check": "^3.0.1",
     "tailwindcss": "^3.2.6",
@@ -33,5 +38,9 @@
     "vite": "^4.0.0",
     "vitest": "^0.25.3"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "@prisma/client": "^4.10.1",
+    "zod": "^3.20.6"
+  }
 }
