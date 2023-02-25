@@ -1,10 +1,13 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
-  import InputImage from "$lib/components/InputImage/InputImage.svelte";
-  import InputOption from "$lib/components/InputOption/InputOption.svelte";
-  import TableProduct from "$lib/components/TableProduct/TableProduct.svelte";
-  import TextArea from "$lib/components/TextArea/TextArea.svelte";
-  import TextInput from "$lib/components/TextInput/TextInput.svelte";
+  import {
+    InputImage,
+    InputOption,
+    TableProduct,
+    TextArea,
+    TextInput,
+  } from "$lib/components";
+  // import TextInput from "$lib/components/TextInput/TextInput.svelte";
   import { imageSchema } from "$lib/schema/image.schema";
   import {
     createProductDto,
@@ -85,7 +88,7 @@
   };
 </script>
 
-<div class="flex flex-col px-5.5">
+<div class="flex flex-col px-5.5 lg:pl-0">
   <form
     action="?/createProduct"
     method="post"
@@ -144,7 +147,7 @@
 </div>
 
 {#if data.products.length > 0}
-  <div class="my-10 pl-5.5 flex flex-col gap-6">
+  <div class="pl-5.5 pt-5.5 lg:pl-0">
     <TableProduct products={data.products} class="pr-5.5" />
   </div>
 {/if}

@@ -9,7 +9,11 @@
 <div class="carousel w-full" bind:this={carousel}>
   {#each carouselItems as item, index (index)}
     <div id="item{index + 1}" class="carousel-item w-full">
-      <img src={item.imageUrl} class="w-full" alt="lorem" />
+      <img
+        src={item.imageUrl}
+        class="w-full animate-skeleton h-52"
+        alt="lorem"
+      />
     </div>
   {/each}
 </div>

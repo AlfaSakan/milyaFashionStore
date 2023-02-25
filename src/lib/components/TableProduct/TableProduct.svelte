@@ -1,16 +1,19 @@
 <script lang="ts">
-  import type { Product } from "@prisma/client";
+  import type { Image, Product } from "@prisma/client";
 
-  export let products: Product[] = [];
+  export let products: (Product & {
+    gender: { name: string };
+    category: { name: string };
+    Image?: Image[];
+  })[] = [];
 
-  const exclude = ["id", "createdat", "updatedat"];
+  let className: string = "";
+  export { className as class };
 
-  $: tableHeads = Object.keys(products[0]).filter(
-    (value) => !exclude.includes(value.toLowerCase())
-  );
+  const tableHeaders = ["name", "deskripsi", "gender", "kategori"];
 </script>
 
-<div class="overflow-x-auto w-full">
+<div class="overflow-x-auto w-full {className}">
   <table class="table w-full">
     <!-- head -->
     <thead>
@@ -20,15 +23,15 @@
             <input type="checkbox" class="checkbox" />
           </label>
         </th>
-        {#each tableHeads as tableHead, i (i + tableHead)}
+        {#each tableHeaders as tableHead, i (i + tableHead)}
           <th>{tableHead}</th>
         {/each}
-        <th>Favorite Color</th>
+        <th>Keterangan</th>
         <th />
       </tr>
     </thead>
     <tbody>
-      <!-- row 1 -->
+      <!-- rows -->
       {#each products as product (product.id)}
         <tr>
           <th>
@@ -41,14 +44,28 @@
               <div class="avatar">
                 <div class="mask mask-squircle w-12 h-12">
                   <img
-                    src="https://picsum.photos/200"
-                    alt="Avatar Tailwind CSS Component"
+                    src={product.Image && product.Image.length > 0
+                      ? product.Image[0].imgUrl
+                      : "https://picsum.photos/200"}
+                    alt={product.Image && product.Image.length > 0
+                      ? product.Image[0].title
+                      : "Avatar Tailwind CSS Component"}
+                    class="animate-skeleton"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
               <div>
                 <div class="font-bold">{product.name}</div>
-                <div class="text-sm opacity-50">United States</div>
+                <div class="flex items-center gap-1">
+                  <span class="badge badge-info badge-sm">
+                    {product.category.name}
+                  </span>
+                  <span class="badge badge-info badge-sm">
+                    {product.gender.name}
+                  </span>
+                </div>
               </div>
             </div>
           </td>
@@ -58,9 +75,16 @@
             <span class="badge badge-ghost badge-sm">{product.description}</span
             >
           </td>
-          <td>Purple</td>
+          <td>
+            {product.gender.name}
+          </td>
+          <td>
+            {product.category.name}
+          </td>
           <th>
-            <button class="btn btn-ghost btn-xs">details</button>
+            <a href="/admin/stock/{product.id}" class="btn btn-ghost btn-xs"
+              >details</a
+            >
           </th>
         </tr>
       {/each}
@@ -69,10 +93,10 @@
     <tfoot>
       <tr>
         <th />
-        {#each tableHeads as tableHead, i (i + tableHead)}
+        {#each tableHeaders as tableHead, i (i + tableHead)}
           <th>{tableHead}</th>
         {/each}
-        <th>Favorite Color</th>
+        <th />
         <th />
       </tr>
     </tfoot>

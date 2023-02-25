@@ -10,6 +10,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String @id @default(cuid())
+  createdAt Int
+  updatedAt Int
+
+  email String @unique @db.VarChar(50)
+  name  String @db.VarChar(50)
+  hash  String
+
+  Session Session[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String @id @default(cuid())
+  createdAt Int
+  updatedAt Int
+
+  userAgent String
+  hashToken String
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Gender {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(20)
+
+  Product Product[]
+
+  @@map("genders")
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(20)
+
+  Product Product[]
+  Size    Size[]
+
+  @@map("categories")
+}
+
+model Stock {
+  id     String @id @default(cuid())
+  amount Int    @default(0)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  sizeId Int
+  size   Size @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+
+  @@map("stocks")
+}
+
+model Size {
+  id   Int    @id @default(autoincrement())
+  size String @db.VarChar(50)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  Stock Stock[]
+
+  @@map("sizes")
+}
+
 model Product {
   id        String @id @default(cuid())
   createdAt BigInt
@@ -18,9 +90,27 @@ model Product {
   name        String @db.VarChar(150)
   description String
 
+  genderId   Int
+  gender     Gender   @relation(fields: [genderId], references: [id], onDelete: Cascade)
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
   Product_Tag Product_Tag[]
+  Stock       Stock[]
+  Image       Image[]
 
   @@map("products")
+}
+
+model Image {
+  id     String @id @default(cuid())
+  imgUrl String @unique
+  title  String @db.VarChar(250)
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("images")
 }
 
 model Product_Tag {
@@ -31,6 +121,8 @@ model Product_Tag {
 
   tagId String
   tag   Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@map("productTags")
 }
 
 model Tag {

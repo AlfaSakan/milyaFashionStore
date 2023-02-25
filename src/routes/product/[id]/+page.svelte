@@ -8,12 +8,11 @@
   export let data: PageData;
 
   let carousel: HTMLDivElement;
-  const carouselItems: CarouselItem[] = [
-    { imageUrl: "https://picsum.photos/425/570" },
-    { imageUrl: "https://picsum.photos/425/570" },
-    { imageUrl: "https://picsum.photos/425/570" },
-    { imageUrl: "https://picsum.photos/425/570" },
-  ];
+  $: carouselItems = data.product.Image.map((img) => ({
+    title: img.title,
+    imageUrl: img.imgUrl,
+  })) satisfies CarouselItem[];
+
   const variants = [
     "https://picsum.photos/120/120",
     "https://picsum.photos/120/120",
@@ -54,9 +53,9 @@
 
 <div class="flex flex-col relative">
   <div class="pl-[22px] mt-8">
-    <h2 class="font-semibold text-2xl">{data.title}</h2>
-    <p class="text-base font-medium">{data.content}</p>
-    <p class="my-4">{formatNumberToRupiah(data.price)}</p>
+    <h2 class="font-semibold text-2xl">{data.product.name}</h2>
+    <p class="text-base font-medium">{data.product.description}</p>
+    <p class="my-4">{formatNumberToRupiah(1000000)}</p>
   </div>
 
   <Carousel {carouselItems} bind:carousel withPagination={false} />
@@ -68,12 +67,14 @@
 
   <div class="px-[22px] mt-16">
     <div class="flex items-center justify-between mb-2 px-4">
-      <p class="font-semibold text-black">Select size</p>
-      <p class="text-neutral font-medium">Select size</p>
+      <p class="font-semibold text-black dark:text-white">Select size</p>
+      <p class="text-neutral font-medium dark:text-white">Select size</p>
     </div>
     <div class="grid grid-cols-3 gap-2 mb-4">
-      {#each sizes as size (size)}
-        <button class="btn btn-outline">{size}</button>
+      {#each data.stocks as stock (stock.id)}
+        <button class="btn btn-outline {stock.amount && 'btn-disabled'}">
+          {stock.size.size}
+        </button>
       {/each}
     </div>
     <button class="btn w-full btn-circle mb-2 h-14 bg-black">Bag</button>

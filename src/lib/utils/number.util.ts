@@ -4,3 +4,11 @@ export function formatNumberToRupiah(numb: number) {
     style: "currency",
   }).format(numb);
 }
+
+export function bigIntHandling<T>(obj: T): T {
+  return JSON.parse(
+    JSON.stringify(obj, (_, value) =>
+      typeof value === "bigint" ? Number(value) : value
+    )
+  );
+}
