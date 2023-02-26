@@ -1,5 +1,7 @@
 // console.log({ key: process.env.FIREBASE_API_KEY });
 
+const isEnvTest = process.env.NODE_ENV === "test";
+
 export const env = {
   apiKey: process.env.FIREBASE_API_KEY || "",
   authDomain: process.env.FIREBASE_AUTH_DOMAIN || "",
@@ -8,5 +10,5 @@ export const env = {
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID || "",
   appId: process.env.FIREBASE_APP_ID || "",
   jwtKey: process.env.JWT_KEY || "",
-  salt: process.env.SALT || "",
+  salt: (isEnvTest ? process.env.VITE_SALT : process.env.SALT) || "",
 } as const;

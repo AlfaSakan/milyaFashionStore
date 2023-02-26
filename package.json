@@ -14,7 +14,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "test:unit": "vitest",
-    "test:unit:coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage",
     "lint": "eslint ."
   },
   "devDependencies": {
