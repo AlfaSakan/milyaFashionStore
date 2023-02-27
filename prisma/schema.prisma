@@ -18,6 +18,10 @@ model User {
   email String @unique @db.VarChar(50)
   name  String @db.VarChar(50)
   hash  String
+  level String @default("user") @db.VarChar(10)
+
+  imageId String? @unique
+  image   Image?  @relation(fields: [imageId], references: [id])
 
   Session Session[]
 
@@ -84,8 +88,8 @@ model Size {
 
 model Product {
   id        String @id @default(cuid())
-  createdAt BigInt
-  updatedAt BigInt
+  createdAt Int
+  updatedAt Int
 
   name        String @db.VarChar(150)
   description String
@@ -107,8 +111,10 @@ model Image {
   imgUrl String @unique
   title  String @db.VarChar(250)
 
-  productId String
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  User User?
 
   @@map("images")
 }

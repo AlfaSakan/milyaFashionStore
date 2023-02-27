@@ -1,4 +1,4 @@
-import crypto from "node:crypto";
+import { createId } from "@paralleldrive/cuid2";
 
 export function formErrorHandling(error?: string[]) {
   if (!error) return "";
@@ -19,7 +19,6 @@ export function extractExtFromFile(val: File) {
 export function generateRandomName() {
   const now = new Date();
   const formatedDate = now.toLocaleDateString("id-ID").replaceAll("/", "-");
-  const randomUUID = crypto.randomUUID();
 
-  return `${randomUUID}-${formatedDate}`;
+  return `${createId()}-${formatedDate}`;
 }

@@ -1,4 +1,4 @@
-import { env } from "$lib/constants/env.constant";
+import { env } from "$lib/server/constants/env.constant";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 
 type Payload = {
@@ -27,11 +27,11 @@ export function generateToken(payload: Payload) {
   return { accessToken, refreshToken };
 }
 
-export function generateAccessToken(payload: Payload) {
+function generateAccessToken(payload: Payload) {
   return signJwt(payload, "1h");
 }
 
-export function generateRefreshToken(payload: Payload) {
+function generateRefreshToken(payload: Payload) {
   return signJwt(payload, "30 days");
 }
 
@@ -39,7 +39,7 @@ export function verifyToken(token: string) {
   try {
     if (!env.jwtKey) throw new Error("JWT KEY undefined");
 
-    const data = jwt.verify(token, env.jwtKey) as JwtPayload;
+    const data = jwt.verify(token, env.jwtKey) as JwtPayload & Payload;
 
     return { data, error: null };
   } catch (error) {

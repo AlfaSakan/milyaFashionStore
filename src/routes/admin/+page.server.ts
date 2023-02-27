@@ -55,7 +55,7 @@ export const actions: Actions = {
         })),
       });
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
 
       throw error(500, { message: "Could not create the product" });
     }

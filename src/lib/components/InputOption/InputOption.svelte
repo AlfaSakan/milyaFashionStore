@@ -3,11 +3,13 @@
 
   export let name: string;
   export let label: string = "";
-  export let value: string = "";
+  export let value: string | undefined;
   export let items: { value: string; label: string }[] = [];
 
   let className: string = "";
   export { className as class };
+
+  $: selectedValue = value || items.length > 0 ? items[0].value : "";
 </script>
 
 <div class={className}>
@@ -17,7 +19,7 @@
       id={name}
       {name}
       class="input bg-transparent appearance-none outline-none focus:outline-none w-full absolute"
-      value={value || items[0].value}
+      value={selectedValue}
     >
       {#each items as item (item.value)}
         <option value={item.value}>{item.label}</option>

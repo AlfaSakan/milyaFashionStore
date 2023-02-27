@@ -1,4 +1,4 @@
-import { env } from "$lib/constants/env.constant";
+import { env } from "$lib/server/constants/env.constant";
 import * as argon from "argon2";
 
 const salt = Buffer.from(env.salt, "utf-8");

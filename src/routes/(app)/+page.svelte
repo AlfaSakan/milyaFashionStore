@@ -30,6 +30,10 @@
 
 <Carousel bind:carousel {carouselItems} />
 
+{#if data.user}
+  <p>{JSON.stringify(data.user)}</p>
+{/if}
+
 <div class="grid grid-cols-2 w-full gap-2 place-items-center">
   {#each data.products as product (product.id)}
     <Card

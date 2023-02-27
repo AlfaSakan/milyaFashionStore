@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { env } from "$lib/constants/env.constant";
-import { initializeApp } from "firebase/app";
+import { initializeApp, type FirebaseOptions } from "firebase/app";
 import {
   getDownloadURL,
   getStorage,
@@ -18,21 +17,15 @@ import {
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: env.apiKey,
-  authDomain: env.authDomain,
-  projectId: env.projectId,
-  storageBucket: env.storageBucket,
-  messagingSenderId: env.messagingSenderId,
-  appId: env.appId,
-};
+export function firebase(options: FirebaseOptions) {
+  // Initialize Firebase
+  const app = initializeApp(options);
+  const storage = getStorage(app);
+  return ref(storage, "images");
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-const imagesRef = ref(storage, "images");
-
-export async function uploadImages(data: File) {
+export async function uploadImages(data: File, options: FirebaseOptions) {
+  const imagesRef = firebase(options);
   const fileRef = ref(
     imagesRef,
     `${generateRandomName()}.${extractExtFromFile(data)}`
@@ -42,22 +35,26 @@ export async function uploadImages(data: File) {
   return getDownloadURL(snapshot.ref);
 }
 
-export async function uploadImagesBase64(data: string) {
-  const now = new Date();
-  const formatedDate = now.toLocaleDateString("id-ID").replaceAll("/", "-");
+export async function uploadImagesBase64(
+  data: string,
+  options: FirebaseOptions
+) {
+  const imagesRef = firebase(options);
   const ext = extractExtFromBase64(data);
-  const randomUUID = crypto.randomUUID();
 
-  const fileRef = ref(imagesRef, `${randomUUID}${formatedDate}.${ext}`);
+  const fileRef = ref(imagesRef, `${generateRandomName()}.${ext}`);
 
   const snapshot = await uploadString(fileRef, data, "data_url");
   return getDownloadURL(snapshot.ref);
 }
 
-export async function uploadFileList(files: FileList) {
+export async function uploadFileList(
+  files: FileList,
+  options: FirebaseOptions
+) {
   const urls: string[] = [];
   for (const file of files) {
-    const url = await uploadImages(file);
+    const url = await uploadImages(file, options);
     urls.push(url);
   }
 

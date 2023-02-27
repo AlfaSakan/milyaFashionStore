@@ -1,5 +1,3 @@
-// console.log({ key: process.env.FIREBASE_API_KEY });
-
 const isEnvTest = process.env.NODE_ENV === "test";
 
 export const env = {

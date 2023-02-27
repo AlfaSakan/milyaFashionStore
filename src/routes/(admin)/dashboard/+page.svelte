@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
+  import { enhance, type SubmitFunction } from "$app/forms";
   import {
     InputImage,
     InputOption,
@@ -7,23 +7,21 @@
     TextArea,
     TextInput,
   } from "$lib/components";
-  // import TextInput from "$lib/components/TextInput/TextInput.svelte";
   import { imageSchema } from "$lib/schema/image.schema";
   import {
     createProductDto,
     type CreateProductDto,
   } from "$lib/schema/product.schema";
   import { uploadFileList } from "$lib/utils/firebase.util";
-  import { formErrorHandling } from "$lib/utils/string.util";
   import { validateData } from "$lib/utils/validate-data.util";
-  import type { SubmitFunction } from "@sveltejs/kit";
   import type { PageData } from "./$types";
 
   export let data: PageData;
+  $: firebaseOptions = data.firebaseOptions;
   // export let form: ActionData;
 
   let base64: string[] = [];
-  let formErrors: Record<string, string[] | undefined>;
+  let formErrors: Record<string, string | undefined>;
   let formData: CreateProductDto;
 
   function handleChange(e: CustomEvent<{ files: FileList }>) {
@@ -35,14 +33,13 @@
         const valid = imageSchema.safeParse(f);
         if (!valid.success) {
           const fileError = valid.error.flatten().formErrors[0];
-          formErrors = { ...formErrors, file: [fileError] };
+          formErrors = { ...formErrors, file: fileError };
           continue;
         }
 
         const reader = new FileReader();
         reader.onload = (ev) => {
           const result = (ev.target?.result as string) || "";
-
           base64 = [...base64, result];
         };
         reader.readAsDataURL(f);
@@ -64,10 +61,10 @@
     }
 
     try {
-      const urls = await uploadFileList(dataFiles);
+      const urls = await uploadFileList(dataFiles, firebaseOptions);
       data.set("files", JSON.stringify(urls));
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       cancel();
     }
 
@@ -99,7 +96,7 @@
       label="Nama Produk"
       name="name"
       placeholder="Masukkan nama produk"
-      error={formErrorHandling(formErrors?.name)}
+      error={formErrors?.name}
       value={formData?.name}
     />
     <InputOption
@@ -125,7 +122,7 @@
       label="Deskripsi Produk"
       name="description"
       placeholder="Masukkan deskripsi produk"
-      error={formErrorHandling(formErrors?.description)}
+      error={formErrors?.description}
       value={formData?.description}
     />
     {#if base64.length > 0}
@@ -140,7 +137,7 @@
       label="Upload images"
       class="-mt-4"
       on:select={handleChange}
-      error={formErrorHandling(formErrors?.file)}
+      error={formErrors?.file}
     />
     <button class="btn w-full btn-primary" type="submit">Create Product</button>
   </form>

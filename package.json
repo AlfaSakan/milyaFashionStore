@@ -41,6 +41,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.0",
     "@prisma/client": "^4.10.1",
     "argon2": "^0.30.3",
     "firebase": "^9.17.1",

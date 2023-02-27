@@ -32,6 +32,6 @@
     on:change={handleChange}
   />
   <label for={name} class="label">
-    <span class="label-text-alt text-error">{error}</span>
+    <span class="label-text-alt text-error">{error ? error : ""}</span>
   </label>
 </div>

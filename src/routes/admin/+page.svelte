@@ -64,7 +64,7 @@
       const urls = await uploadFileList(dataFiles);
       data.set("files", JSON.stringify(urls));
     } catch (err) {
-      console.log({ err });
+      console.error({ err });
       cancel();
     }
 

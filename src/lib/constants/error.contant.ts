@@ -5,4 +5,5 @@ export const errorMessages = {
   "email-taken": "Email sudah terdaftar",
   "email-not-register": "Email tidak terdaftar",
   "password-wrong": "Password salah",
+  forbidden: "Tidak dapat diakses",
 } as const;

@@ -8,8 +8,6 @@
   ) {
     const reader = new FileReader();
 
-    console.log("KESINI", e.currentTarget.files);
-
     const inputFiles = e.currentTarget.files;
 
     if (inputFiles) {
